@@ -1,22 +1,9 @@
 from mlflow_pmml import load_model, log_model
-from unittest import TestCase
+from mlflow_pmml.tests import _load_resource, MLFlowTest
 
 import mlflow
-import shutil
-import tempfile
 
-PMML_BYTES = b"<PMML/>"
-
-class MLFlowTest(TestCase):
-
-	def setUp(self):
-		self._tracking_dir = tempfile.mkdtemp()
-		mlflow.set_tracking_uri(f"file://{self._tracking_dir}")
-		mlflow.set_experiment("test")
-
-	def tearDown(self):
-		mlflow.set_tracking_uri(None)
-		shutil.rmtree(self._tracking_dir)
+PMML_BYTES = _load_resource("DecisionTreeIris.pmml")
 
 class PMMLTest(MLFlowTest):
 
