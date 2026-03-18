@@ -1,15 +1,20 @@
 from mlflow.artifacts import download_artifacts
 from mlflow.models import Model
-from mlflow.models.model import MLMODEL_FILE_NAME
+from mlflow.models.model import MLMODEL_FILE_NAME, ModelInfo
 from mlflow.utils.model_utils import _get_flavor_configuration
-from typing import Union
+from typing import Optional, Union
 
 import os
+import sys
 
 FLAVOR_NAME = "pmml"
 FLAVOR_DATA_FILE = "model.pmml"
 
-def save_model(pmml: Union[bytes, str], path, mlflow_model = None):
+def log_model(pmml, artifact_path, registered_model_name = None, **kwargs) -> ModelInfo:
+	pmml_flavor = sys.modules[__name__]
+	return Model.log(artifact_path = artifact_path, flavor = pmml_flavor, registered_model_name = registered_model_name, pmml = pmml, **kwargs)
+
+def save_model(pmml: Union[bytes, str], path, mlflow_model: Optional[Model] = None) -> None:
 	if isinstance(pmml, bytes):
 		pass
 	elif isinstance(pmml, str):
@@ -33,7 +38,7 @@ def save_model(pmml: Union[bytes, str], path, mlflow_model = None):
 	model_path = os.path.join(path, MLMODEL_FILE_NAME)
 	mlflow_model.save(model_path)
 
-def load_model(model_uri):
+def load_model(model_uri) -> bytes:
 	model_path = download_artifacts(model_uri)
 	flavor_conf = _get_flavor_configuration(model_path, flavor_name = FLAVOR_NAME)
 
