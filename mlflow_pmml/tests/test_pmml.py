@@ -1,5 +1,6 @@
+from jpmml_mlflow.tests import MLFlowTest
 from mlflow_pmml import load_model, log_model
-from mlflow_pmml.tests import _load_resource, MLFlowTest
+from mlflow_pmml.tests import _load_resource
 
 import mlflow
 

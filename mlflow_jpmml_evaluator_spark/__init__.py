@@ -1,4 +1,4 @@
-from mlflow_jpmml_evaluator.util import _load_classpath
+from jpmml_mlflow.util import load_classpath
 from mlflow_jpmml_evaluator_spark import spark3x, spark4x
 from py4j.java_gateway import JavaObject, JVMView
 from pyspark.sql import SparkSession
@@ -24,7 +24,7 @@ def classpath(version: str = None) -> List[str]:
 	jpmml_evaluator_jars = mlflow_jpmml_evaluator.classpath()
 
 	spark_module = _spark_module(version)
-	jpmml_evaluator_spark_jars = mlflow_jpmml_evaluator.util._load_classpath(os.path.dirname(spark_module.__file__))
+	jpmml_evaluator_spark_jars = load_classpath(os.path.dirname(spark_module.__file__))
 
 	return jpmml_evaluator_spark_jars + jpmml_evaluator_jars
 

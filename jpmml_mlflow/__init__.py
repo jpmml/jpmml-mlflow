@@ -1,0 +1,1 @@
+from .metadata import __copyright__, __license__, __version__

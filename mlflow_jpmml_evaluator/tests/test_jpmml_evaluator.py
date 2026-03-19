@@ -1,5 +1,6 @@
+from jpmml_mlflow.tests import MLFlowTest
 from mlflow_jpmml_evaluator import classpath, load_model, log_model
-from mlflow_pmml.tests import _load_resource, MLFlowTest
+from mlflow_pmml.tests import _load_resource
 from py4j.java_gateway import JavaGateway, JavaObject
 
 import mlflow
@@ -7,7 +8,7 @@ import os
 
 PMML_BYTES = _load_resource("DecisionTreeIris.pmml")
 
-class JpmmlEvaluatorTest(MLFlowTest):
+class JPMMLEvaluatorTest(MLFlowTest):
 
 	def setUp(self):
 		super().setUp()

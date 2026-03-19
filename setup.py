@@ -1,9 +1,13 @@
 from setuptools import setup, find_packages
 
+exec(open("jpmml_mlflow/metadata.py").read())
+
 setup(
 	name = "jpmml-mlflow",
-	version = "0.1.0",
-	license = "GNU Affero General Public License (AGPL) version 3.0",
+	version = __version__,
+	author = "Villu Ruusmann",
+	author_email = "villu.ruusmann@gmail.com",
+	license = __license__,
 	packages = find_packages(exclude = ["*.tests.*", "*.tests"]),
 	package_data = {
 		"" : ["resources/*.jar"],

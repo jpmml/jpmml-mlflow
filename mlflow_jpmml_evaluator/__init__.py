@@ -1,11 +1,11 @@
-from mlflow_jpmml_evaluator.util import _load_classpath
+from jpmml_mlflow.util import load_classpath
 from py4j.java_gateway import JavaObject, JVMView
 
 import mlflow_pmml
 import os
 
 def classpath():
-	return _load_classpath(os.path.dirname(__file__))
+	return load_classpath(os.path.dirname(__file__))
 
 log_model = mlflow_pmml.log_model
 

@@ -1,5 +1,6 @@
+from jpmml_mlflow.tests import MLFlowTest
 from mlflow_jpmml_evaluator_spark import classpath, load_model, log_model
-from mlflow_pmml.tests import MLFlowTest, _load_resource
+from mlflow_pmml.tests import _load_resource
 from py4j.java_gateway import JavaObject
 from pyspark.sql import SparkSession
 
@@ -7,7 +8,7 @@ import mlflow
 
 PMML_BYTES = _load_resource("DecisionTreeIris.pmml")
 
-class JpmmlEvaluatorSparkTest(MLFlowTest):
+class JPMMLEvaluatorSparkTest(MLFlowTest):
 
 	def setUp(self):
 		self._spark = SparkSession.builder \
