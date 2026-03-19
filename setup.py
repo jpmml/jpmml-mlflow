@@ -8,9 +8,17 @@ setup(
 	package_data = {
 		"" : ["resources/*.jar"],
 	},
+	python_requires = ">=3.8",
 	install_requires = [
 		"mlflow>=2.0,<3.0",
-		"py4j",
-		"pyspark"
-	]
+	],
+	extras_require = {
+		"evaluator" : [
+			"py4j",
+		],
+		"evaluator-spark" : [
+			"py4j",
+			"pyspark>=3.0",
+		],
+	},
 )
