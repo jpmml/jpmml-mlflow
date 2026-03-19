@@ -17,6 +17,10 @@ class JpmmlEvaluatorTest(MLFlowTest):
 		self._gateway.shutdown()
 		super().tearDown()
 
+	def test_classpath(self):
+		jars = classpath()
+		self.assertEqual(15, len(jars))
+
 	def test_log_load(self):
 		with mlflow.start_run() as run:
 			log_model(pmml = PMML_BYTES, artifact_path = "model")
