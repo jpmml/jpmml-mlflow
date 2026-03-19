@@ -7,9 +7,10 @@ setup(
 	packages = find_packages(exclude = ["*.tests.*", "*.tests"]),
 	package_data = {
 		"" : ["resources/*.jar"],
-	}
+	},
 	install_requires = [
 		"mlflow>=2.0,<3.0",
-		"py4j"
-	],
+		"py4j",
+		"pyspark"
+	]
 )

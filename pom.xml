@@ -9,6 +9,7 @@
 
 	<modules>
 		<module>mlflow_jpmml_evaluator</module>
+		<module>mlflow_jpmml_evaluator_spark</module>
 	</modules>
 
 	<build>
