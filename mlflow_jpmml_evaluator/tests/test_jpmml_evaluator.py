@@ -1,4 +1,4 @@
-from mlflow_jpmml_evaluator import _load_classpath, load_model, log_model
+from mlflow_jpmml_evaluator import classpath, load_model, log_model
 from mlflow_pmml.tests import _load_resource, MLFlowTest
 from py4j.java_gateway import JavaGateway, JavaObject
 
@@ -11,7 +11,7 @@ class JpmmlEvaluatorTest(MLFlowTest):
 
 	def setUp(self):
 		super().setUp()
-		self._gateway = JavaGateway.launch_gateway(classpath = os.pathsep.join(_load_classpath()))
+		self._gateway = JavaGateway.launch_gateway(classpath = os.pathsep.join(classpath()))
 
 	def tearDown(self):
 		self._gateway.shutdown()
