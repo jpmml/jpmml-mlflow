@@ -4,7 +4,7 @@ import mlflow
 import shutil
 import tempfile
 
-class MLFlowTest(TestCase):
+class MLflowTest(TestCase):
 
 	def setUp(self):
 		self._tracking_dir = tempfile.mkdtemp()

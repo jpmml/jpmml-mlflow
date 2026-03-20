@@ -1,11 +1,11 @@
-from jpmml_mlflow.tests import MLFlowTest
+from jpmml_mlflow.tests import MLflowTest
 from jpmml_mlflow.sklearn import log_model
 from jpmml_mlflow.sklearn.tests import _make_sk_model
 from mlflow.models import Model
 
 import mlflow
 
-class SkLearnTest(MLFlowTest):
+class SkLearnTest(MLflowTest):
 
 	def test_decision_tree_iris(self):
 		sk_model = _make_sk_model()

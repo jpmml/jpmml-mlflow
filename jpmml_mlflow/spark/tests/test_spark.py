@@ -1,4 +1,4 @@
-from jpmml_mlflow.tests import MLFlowTest
+from jpmml_mlflow.tests import MLflowTest
 from jpmml_mlflow.spark import classpath, log_model
 from jpmml_mlflow.spark.tests import _make_spark_model
 from mlflow.models import Model
@@ -6,7 +6,7 @@ from pyspark.sql import SparkSession
 
 import mlflow
 
-class SparkTest(MLFlowTest):
+class SparkTest(MLflowTest):
 
 	def setUp(self):
 		self._spark = SparkSession.builder \
