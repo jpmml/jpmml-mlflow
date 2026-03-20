@@ -28,5 +28,9 @@ setup(
 			"scikit-learn",
 			"sklearn2pmml"
 		],
+		"spark" : [
+			"pyspark>=3.0",
+			"pyspark2pmml"
+		]
 	},
 )
