@@ -3,13 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jpmml</groupId>
-	<artifactId>jpmml-mlflow</artifactId>
+	<artifactId>jpmml-mlflow-parent</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>mlflow_jpmml_evaluator</module>
-		<module>mlflow_jpmml_evaluator_spark</module>
+		<module>jpmml_mlflow</module>
 	</modules>
 
 	<build>

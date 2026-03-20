@@ -4,16 +4,16 @@
 
 	<parent>
 		<groupId>org.jpmml</groupId>
-		<artifactId>jpmml-mlflow</artifactId>
+		<artifactId>jpmml-mlflow-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jpmml-mlflow-evaluator-spark</artifactId>
+	<artifactId>jpmml-mlflow</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>spark3x</module>
-		<module>spark4x</module>
+		<module>evaluator</module>
+		<module>evaluator_spark</module>
 	</modules>
 
 	<properties>
