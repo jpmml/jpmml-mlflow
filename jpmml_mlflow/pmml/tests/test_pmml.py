@@ -1,6 +1,7 @@
 from jpmml_mlflow.tests import MLFlowTest
 from jpmml_mlflow.pmml import load_model, log_model
-from jpmml_mlflow.pmml.tests import _load_resource
+from jpmml_mlflow.pmml.tests import _find_resource, _load_resource
+from pathlib import Path
 
 import mlflow
 
@@ -14,9 +15,9 @@ class PMMLTest(MLFlowTest):
 		pmml_bytes = load_model(f"runs:/{run.info.run_id}/model")
 		self.assertEqual(PMML_BYTES, pmml_bytes)
 
-	def test_str(self):
-		pmml_str = PMML_BYTES.decode("utf-8")
+	def test_path(self):
+		pmml_path = Path(_find_resource("DecisionTreeIris.pmml"))
 		with mlflow.start_run() as run:
-			log_model(pmml = pmml_str, artifact_path = "model")
+			log_model(pmml = pmml_path, artifact_path = "model")
 		pmml_bytes = load_model(f"runs:/{run.info.run_id}/model")
 		self.assertEqual(PMML_BYTES, pmml_bytes)

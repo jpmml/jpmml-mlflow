@@ -5,6 +5,7 @@ from mlflow.utils.model_utils import _get_flavor_configuration
 from typing import Optional, Union
 
 import os
+import shutil
 import sys
 
 FLAVOR_NAME = "pmml"
@@ -14,21 +15,25 @@ def log_model(pmml, artifact_path = None, registered_model_name = None, name = N
 	pmml_flavor = sys.modules[__name__]
 	return Model.log(artifact_path = name or artifact_path, flavor = pmml_flavor, registered_model_name = registered_model_name, pmml = pmml, **kwargs)
 
-def save_model(pmml: Union[bytes, str], path, mlflow_model: Optional[Model] = None) -> None:
+def save_model(pmml: Union[bytes, str, os.PathLike], path, mlflow_model: Optional[Model] = None) -> None:
 	if isinstance(pmml, bytes):
 		pass
-	elif isinstance(pmml, str):
-		pmml = pmml.encode("utf-8")
+	elif isinstance(pmml, (str, os.PathLike)):
+		pass
 	else:
-		raise TypeError("PMML is not bytes or str")
+		raise TypeError("PMML is not bytes or a path-like object")
 
 	if mlflow_model is None:
 		mlflow_model = Model()
 
 	os.makedirs(path, exist_ok = True)
 	pmml_path = os.path.join(path, FLAVOR_DATA_FILE)
-	with open(pmml_path, "wb") as pmml_file:
-		pmml_file.write(pmml)
+
+	if isinstance(pmml, bytes):
+		with open(pmml_path, "wb") as pmml_file:
+			pmml_file.write(pmml)
+	elif isinstance(pmml, (str, os.PathLike)):
+		shutil.copy(pmml, pmml_path)
 
 	flavor_conf = {
 		"data" : FLAVOR_DATA_FILE
