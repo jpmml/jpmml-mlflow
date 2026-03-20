@@ -1,6 +1,6 @@
 from jpmml_mlflow.tests import MLFlowTest
-from mlflow_jpmml_evaluator_spark import classpath, load_model, log_model
-from mlflow_pmml.tests import _load_resource
+from jpmml_mlflow.evaluator_spark import classpath, load_model, log_model
+from jpmml_mlflow.pmml.tests import _load_resource
 from py4j.java_gateway import JavaObject
 from pyspark.sql import SparkSession
 
