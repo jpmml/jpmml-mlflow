@@ -24,5 +24,9 @@ setup(
 			"py4j",
 			"pyspark>=3.0",
 		],
+		"sklearn" : [
+			"scikit-learn",
+			"sklearn2pmml"
+		],
 	},
 )
