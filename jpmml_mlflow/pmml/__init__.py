@@ -10,9 +10,9 @@ import sys
 FLAVOR_NAME = "pmml"
 FLAVOR_DATA_FILE = "model.pmml"
 
-def log_model(pmml, artifact_path, registered_model_name = None, **kwargs) -> ModelInfo:
+def log_model(pmml, artifact_path = None, registered_model_name = None, name = None, **kwargs) -> ModelInfo:
 	pmml_flavor = sys.modules[__name__]
-	return Model.log(artifact_path = artifact_path, flavor = pmml_flavor, registered_model_name = registered_model_name, pmml = pmml, **kwargs)
+	return Model.log(artifact_path = name or artifact_path, flavor = pmml_flavor, registered_model_name = registered_model_name, pmml = pmml, **kwargs)
 
 def save_model(pmml: Union[bytes, str], path, mlflow_model: Optional[Model] = None) -> None:
 	if isinstance(pmml, bytes):

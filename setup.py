@@ -14,7 +14,7 @@ setup(
 	},
 	python_requires = ">=3.8",
 	install_requires = [
-		"mlflow>=2.0,<3.0",
+		"mlflow>=2.0",
 	],
 	extras_require = {
 		"evaluator" : [

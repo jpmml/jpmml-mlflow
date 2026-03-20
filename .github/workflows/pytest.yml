@@ -13,20 +13,20 @@ jobs:
       matrix:
         include:
           - python: '3.8'
-            mlflow: '2.0.1'
-            pyspark: '3.0.3'
+            mlflow: '2.0.1' # Earliest MLflow 2.X
+            pyspark: '3.0.3' # Earliest PySpark 3.X
             java: '11'
           - python: '3.11'
-            mlflow: '2.22.4'
-            pyspark: '3.5.8'
+            mlflow: '2.22.4' # Latest MLflow 2.X
+            pyspark: '3.5.8' # Latest PySpark 3.X
             java: '11'
           - python: '3.13'
-            mlflow: '2.22.4'
-            pyspark: '4.0.2'
+            mlflow: '3.0.0' # Earliest MLflow 3.X
+            pyspark: '4.0.2' # Earliest PySpark 4.X
             java: '17'
           - python: '3.13'
-            mlflow: '2.22.4'
-            pyspark: '4.1.1'
+            mlflow: '3.10.1' # Latest MLflow 3.X
+            pyspark: '4.1.1' # Latest PySpark 4.X
             java: '17'
 
     steps:
