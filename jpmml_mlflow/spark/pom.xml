@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>shared</module>
 		<module>spark34</module>
 		<module>spark35</module>
 		<module>spark40</module>
@@ -19,6 +20,7 @@
 	</modules>
 
 	<properties>
+		<jpmml-converter.version></jpmml-converter.version>
 		<jpmml-sparkml.version></jpmml-sparkml.version>
 	</properties>
 
@@ -26,8 +28,30 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.jpmml</groupId>
+				<artifactId>pmml-converter</artifactId>
+				<version>${jpmml-converter.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jpmml</groupId>
 				<artifactId>pmml-sparkml</artifactId>
 				<version>${jpmml-sparkml.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.jpmml</groupId>
+						<artifactId>pmml-converter</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.jpmml</groupId>
+						<artifactId>pmml-converter-testing</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

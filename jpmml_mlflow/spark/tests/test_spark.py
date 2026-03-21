@@ -13,6 +13,19 @@ class SparkTest(PySparkTest):
 	def _spark_jars(cls) -> List[str]:
 		return classpath()
 
+	def test_classpath(self):
+		spark34_jars = classpath("3.4.")
+		spark35_jars = classpath("3.5.")
+		spark40_jars = classpath("4.0.")
+		spark41_jars = classpath("4.1.")
+
+		self.assertEqual(1 + 10, len(spark34_jars))
+		self.assertEqual(1 + 10, len(spark35_jars))
+		self.assertEqual(1 + 10, len(spark40_jars))
+		self.assertEqual(1 + 10, len(spark41_jars))
+		self.assertNotEqual(spark34_jars[0], spark41_jars[0])
+		self.assertEqual(set(spark34_jars[1:]), set(spark41_jars[1:]))
+
 	def test_decision_tree_iris(self):
 		spark_model, df = _make_spark_model(self._spark)
 		with mlflow.start_run() as run:

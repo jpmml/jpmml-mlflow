@@ -1,4 +1,4 @@
-from jpmml_mlflow.spark import spark34, spark35, spark40, spark41
+from jpmml_mlflow.spark import shared, spark34, spark35, spark40, spark41
 from jpmml_mlflow.util import load_classpath
 from mlflow.models import Model
 from mlflow.models.model import ModelInfo
@@ -34,7 +34,11 @@ def classpath(version: str = None) -> List[str]:
 		version = pyspark.__version__
 
 	spark_module = _spark_module(version)
-	return load_classpath(os.path.dirname(spark_module.__file__))
+	spark_jars = load_classpath(os.path.dirname(spark_module.__file__))
+
+	shared_jars = load_classpath(os.path.dirname(shared.__file__))
+
+	return spark_jars + shared_jars
 
 def _convert(spark_model, input_example) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
