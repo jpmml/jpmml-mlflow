@@ -1,4 +1,4 @@
-from jpmml_mlflow.pmml.tests import _find_resource
+from jpmml_mlflow.tests import _find_resource
 from sklearn.datasets import load_iris
 from sklearn.tree import DecisionTreeClassifier
 

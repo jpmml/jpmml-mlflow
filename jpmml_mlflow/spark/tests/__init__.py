@@ -1,4 +1,4 @@
-from jpmml_mlflow.pmml.tests import _find_resource
+from jpmml_mlflow.tests import _find_resource
 from pyspark.ml import Pipeline
 from pyspark.ml.classification import DecisionTreeClassifier
 from pyspark.ml.feature import RFormula

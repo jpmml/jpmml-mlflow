@@ -1,6 +1,5 @@
-from jpmml_mlflow.tests import MLflowTest
+from jpmml_mlflow.tests import _find_resource, _load_resource, MLflowTest
 from jpmml_mlflow.pmml import load_model, log_model
-from jpmml_mlflow.pmml.tests import _find_resource, _load_resource
 from pathlib import Path
 
 import mlflow
