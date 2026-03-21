@@ -1,25 +1,18 @@
-from jpmml_mlflow.tests import MLflowTest
+from jpmml_mlflow.tests import PySparkTest
 from jpmml_mlflow.evaluator_spark import classpath, load_model, log_model
 from jpmml_mlflow.pmml.tests import _load_resource
 from py4j.java_gateway import JavaObject
-from pyspark.sql import SparkSession
+from typing import List
 
 import mlflow
 
 PMML_BYTES = _load_resource("DecisionTreeIris.pmml")
 
-class JPMMLEvaluatorSparkTest(MLflowTest):
+class JPMMLEvaluatorSparkTest(PySparkTest):
 
-	def setUp(self):
-		self._spark = SparkSession.builder \
-			.master("local") \
-			.config("spark.jars", ",".join(classpath())) \
-			.getOrCreate()
-		super().setUp()
-
-	def tearDown(self):
-		super().tearDown()
-		self._spark.stop()
+	@classmethod
+	def _spark_jars(cls) -> List[str]:
+		return classpath()
 
 	def test_classpath(self):
 		spark3_jars = classpath("3.X")

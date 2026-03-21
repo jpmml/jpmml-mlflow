@@ -1,23 +1,16 @@
-from jpmml_mlflow.tests import MLflowTest
+from jpmml_mlflow.tests import PySparkTest
 from jpmml_mlflow.spark import classpath, log_model
 from jpmml_mlflow.spark.tests import _make_spark_model
 from mlflow.models import Model
-from pyspark.sql import SparkSession
+from typing import List
 
 import mlflow
 
-class SparkTest(MLflowTest):
+class SparkTest(PySparkTest):
 
-	def setUp(self):
-		self._spark = SparkSession.builder \
-			.master("local") \
-			.config("spark.jars", ",".join(classpath())) \
-			.getOrCreate()
-		super().setUp()
-
-	def tearDown(self):
-		super().tearDown()
-		self._spark.stop()
+	@classmethod
+	def _spark_jars(cls) -> List[str]:
+		return classpath()
 
 	def test_decision_tree_iris(self):
 		spark_model, df = _make_spark_model(self._spark)
