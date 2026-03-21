@@ -30,7 +30,7 @@ setup(
 		],
 		"spark" : [
 			"pyspark>=3.0",
-			"pyspark2pmml"
+			"pyspark2pmml>=0.10.0"
 		]
 	},
 )
