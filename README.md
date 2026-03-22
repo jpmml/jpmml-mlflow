@@ -9,23 +9,21 @@ Every MLflow model artifact has at least one flavor.
 The current flavors (eg. pickle, cloudpickle, ONNX) are **binary** and optimized for **machine execution**.
 They are clearly inadequate for model governance tasks.
 
-Adding PMML as an extra flavor alongside the default flavor(s) opens up models to **humans** and **AI agents** to tackle such **high-order problems**.
+Adding PMML as an extra flavor alongside the default flavor(s) opens up models to **humans** and **AI agents** to tackle **higher-order problems**.
 
 JPMML-MLflow is the bridge between the [Java PMML API](https://github.com/jpmml) ecosystem and [MLflow](https://mlflow.org/).
-It makes your Tabular ML models AI-ready.
+JPMML-MLflow makes your Tabular ML models AI-ready.
 
 # Features #
 
-JPMML-MLflow adds PMML flavor support to MLflow model artifacts.
-
 The Predictive Model Markup Language (PMML) is an XML-based industry standard for representing statistical and data mining models.
-PMML is first and foremost applicable to **structured data** workflows.
+PMML is first and foremost **applicable to structured data** workflows.
 Unstructured data workflows are much better served by other more DNN-oriented standards such as ONNX, PyTorch TorchScript or TensorFlow SavedModel.
 
 PMML is a single-file text-based representation, which makes it suitable for direct human and LLM consumption:
 
 * Interpretation and auditing. See the model inner structure at various abstraction levels.
-* Diffing. Perform structural comparisons between model versions.
+* Diffing. Perform structural and semantic comparisons between model versions.
 * AI data science insights. Ask your favourite LLM to review the model, and suggest workflow changes to steer it in desired directions (eg. more predictive, explainable, or resource efficient).
 
 PMML is equally suitable for execution.
@@ -51,9 +49,9 @@ Alternatively, installing the latest snapshot version from GitHub:
 pip install --upgrade git+https://github.com/jpmml/jpmml-mlflow.git
 ```
 
-The installed package contains all flavor modules.
+The installed package contains all PMML flavor modules.
 
-Some flavor modules require third-party packages such as Scikit-Learn and PySpark.
+Some PMML flavor modules require third-party packages such as Scikit-Learn and PySpark.
 JPMML-MLflow tries to preserve and use whatever versions are already available in the environment.
 
 Installing into a new environment:
@@ -67,7 +65,7 @@ pip install jpmml-mlflow[evaluator,evaluator-spark]
 
 # Usage #
 
-Summary of flavor modules:
+Summary of PMML flavor modules:
 
 * Foundation:
   * `jpmml_mlflow.pmml`. Saves and loads PMML XML documents as UTF-8 byte arrays (blobs).
@@ -167,7 +165,8 @@ with mlflow.start_run():
 
 The conversion task is delegated to the [`sklearn2pmml`](https://github.com/jpmml/sklearn2pmml) package.
 
-The list of supported transformer and estimator types is available [here](https://github.com/jpmml/jpmml-sklearn/blob/master/features.md). Develop and register custom converter classes as necessary.
+The list of supported transformer and estimator types is available [here](https://github.com/jpmml/jpmml-sklearn/blob/master/features.md).
+Develop and register custom [JPMML-SkLearn](https://github.com/jpmml/jpmml-sklearn) converter classes as necessary.
 
 ### `jpmml_mlflow.spark`
 
@@ -185,7 +184,8 @@ with mlflow.start_run():
 
 The conversion task is delegated to the [`pyspark2pmml`](https://github.com/jpmml/pyspark2pmml) package.
 
-The list of supported transformer and estimator types is available [here](https://github.com/jpmml/jpmml-sparkml/blob/master/features.md). Develop and register custom converter classes as necessary.
+The list of supported transformer and estimator types is available [here](https://github.com/jpmml/jpmml-sparkml/blob/master/features.md).
+Develop and register custom [JPMML-SparkML](https://github.com/jpmml/jpmml-sparkml) converter classes as necessary.
 
 PySpark2PMML requires [JPMML-SparkML](https://github.com/jpmml/jpmml-sparkml) library JAR files available on PySpark classpath.
 They are typically added using `--jars` or `--packages` command-line options.
@@ -214,11 +214,11 @@ spark = SparkSession.builder \
 
 Apache Spark is poorly interoperable with Python artifacts.
 The default approach is to turn the Python function flavor of a model artifact into a Python UDF using the `mlflow.pyfunc.spark_udf()` utility function.
-However, scoring Spark DataFrame data with Python UDF is a high friction operation, because the data needs to be serialized to pass it from one environment to another.
+However, scoring Spark DataFrame data with Python UDF is a high friction operation, because the data needs to be re-serialized to pass it from one environment to another.
 
 The `jpmml_mlflow.evaluator-spark` module provides a compelling alternative to that.
 The PMML flavor of a model artifact is loaded into a JPMML-Evaluator artifact, which is then wrapped into an Apache Spark transformer.
-This transformer scores Spark DataFrame data natively on executors via `mapPartitions`. There is no JVM process boundary, no data serialization overhead, much less any cluster-side ML framework dependencies.
+This transformer scores Spark DataFrame data natively on executors via `mapPartitions`. There is no JVM process boundary, no data serialization overhead, let alone any cluster-side ML framework configuration or dependencies.
 
 Loading a logged model:
 
@@ -233,7 +233,9 @@ Constructing a PySpark transformer, and scoring data:
 ```python
 from jpmml_evaluator_pyspark import FlatPMMLTransformer, NestedPMMLTransformer
 
+# Flat layout of result columns
 pmml_transformer = FlatPMMLTransformer(evaluator)
+# Nested layout of result columns
 #pmml_transformer = NestedPMMLTransformer(evaluator)
 
 #pmml_schema = pmml_transformer.transformSchema(df.schema)
