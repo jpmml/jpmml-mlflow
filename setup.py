@@ -21,16 +21,17 @@ setup(
 			"py4j",
 		],
 		"evaluator-spark" : [
+			"jpmml-evaluator-pyspark",
 			"py4j",
 			"pyspark>=3.0",
 		],
 		"sklearn" : [
 			"scikit-learn",
-			"sklearn2pmml"
+			"sklearn2pmml",
 		],
 		"spark" : [
 			"pyspark>=3.0",
-			"pyspark2pmml>=0.10.0"
+			"pyspark2pmml>=0.10.0",
 		]
 	},
 )
