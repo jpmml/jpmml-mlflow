@@ -1,12 +1,10 @@
+from jpmml_mlflow.flavor import add_pmml_flavor
 from jpmml_mlflow.spark import shared, spark34, spark35, spark40, spark41
 from jpmml_mlflow.util import load_classpath
 from mlflow.models import Model
-from mlflow.models.model import ModelInfo
-from mlflow.models.signature import ModelSignature
 from types import ModuleType
 from typing import List, Optional
 
-import jpmml_mlflow.pmml
 import mlflow.spark
 
 import logging
@@ -40,14 +38,14 @@ def classpath(version: str = None) -> List[str]:
 
 	return spark_jars + shared_jars
 
-def _convert(spark_model, input_example) -> Optional[str]:
+def convert_model(spark_model, input_example_schema) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
 	os.close(fd)
 
 	try:
 		from pyspark2pmml import PMMLBuilder
 
-		PMMLBuilder(input_example.schema, spark_model) \
+		PMMLBuilder(input_example_schema, spark_model) \
 			.buildFile(pmml_path)
 		return pmml_path
 	except:
@@ -55,25 +53,15 @@ def _convert(spark_model, input_example) -> Optional[str]:
 		os.unlink(pmml_path)
 		return None
 
-def log_model(spark_model, artifact_path = None, registered_model_name = None, name = None, **kwargs) -> ModelInfo:
-	spark_flavor = sys.modules[__name__]
-	return Model.log(artifact_path = name or artifact_path, flavor = spark_flavor, registered_model_name = registered_model_name, spark_model = spark_model, **kwargs)
+log_model, _save_model, load_model = add_pmml_flavor(sys.modules[__name__], mlflow.spark, "spark_model", convert_model, ("input_example_schema", ))
 
 def save_model(spark_model, path, mlflow_model: Optional[Model] = None, input_example = None, **kwargs) -> None:
-	if input_example is not None:
-		pmml_path = _convert(spark_model, input_example)
-	else:
+	if input_example is None:
 		_logger.warning("Skipping PMML flavor due to missing input_example")
-		pmml_path = None
+		mlflow.spark.save_model(spark_model, path = path, mlflow_model = mlflow_model, input_example = input_example, **kwargs)
+	else:
+		input_example_schema = input_example.schema
+		if hasattr(input_example, "toPandas"):
+			input_example = input_example.toPandas()
+		_save_model(spark_model, path = path, mlflow_model = mlflow_model, input_example = input_example, input_example_schema = input_example_schema, **kwargs)
 
-	if hasattr(input_example, "toPandas"):
-		input_example = input_example.toPandas()
-
-	if mlflow_model is None:
-		mlflow_model = Model()
-
-	mlflow.spark.save_model(spark_model, path = path, mlflow_model = mlflow_model, input_example = input_example, **kwargs)
-	if pmml_path is not None:
-		jpmml_mlflow.pmml.save_model(pmml_path, path = path, mlflow_model = mlflow_model)
-
-load_model = mlflow.spark.load_model
