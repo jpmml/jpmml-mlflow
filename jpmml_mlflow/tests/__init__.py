@@ -1,4 +1,6 @@
 from abc import abstractmethod, ABC
+from mlflow.artifacts import download_artifacts
+from mlflow.models import Model
 from pyspark.context import SparkContext
 from pyspark.sql import SparkSession
 from typing import List
@@ -36,6 +38,12 @@ class MLflowTest(TestCase):
 	def tearDown(self):
 		mlflow.set_tracking_uri(None)
 		shutil.rmtree(self._tracking_dir)
+
+	def assertFlavors(self, run, expected_flavors):
+		model_path = download_artifacts(f"runs:/{run.info.run_id}/model")
+		mlflow_model = Model.load(model_path)
+		for expected_flavor in expected_flavors:
+			self.assertIn(expected_flavor, mlflow_model.flavors)
 
 class PySparkTest(MLflowTest, ABC):
 
