@@ -13,17 +13,17 @@ import tempfile
 
 _logger = logging.getLogger(__name__)
 
-def _convert(sk_model) -> Optional[str]:
+def _convert(obj) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
 	os.close(fd)
 
 	try:
 		from sklearn2pmml import sklearn2pmml
 
-		sklearn2pmml(sk_model, pmml_path)
+		sklearn2pmml(obj, pmml_path)
 		return pmml_path
 	except:
-		_logger.warning("Failed to convert Scikit-Learn object to PMML", exc_info = True)
+		_logger.warning("Failed to convert model artifact to PMML", exc_info = True)
 		os.unlink(pmml_path)
 		return None
 

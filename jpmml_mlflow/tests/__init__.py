@@ -6,6 +6,7 @@ from unittest import TestCase
 
 import mlflow
 import os
+import pandas
 import shutil
 import tempfile
 
@@ -16,6 +17,14 @@ def _load_resource(name):
 	resource_path = _find_resource(name)
 	with open(resource_path, "rb") as resource_file:
 		return resource_file.read()
+
+def _load_iris():
+	df = pandas.read_csv(_find_resource("Iris.csv"))
+
+	iris_X = df[df.columns[0:4]]
+	iris_y = df["Species"]
+
+	return (iris_X, iris_y)
 
 class MLflowTest(TestCase):
 

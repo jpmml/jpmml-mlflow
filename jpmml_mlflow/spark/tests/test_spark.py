@@ -26,10 +26,11 @@ class SparkTest(PySparkTest):
 		self.assertNotEqual(spark34_jars[0], spark41_jars[0])
 		self.assertEqual(set(spark34_jars[1:]), set(spark41_jars[1:]))
 
-	def test_decision_tree_iris(self):
+	def test_spark_model(self):
 		spark_model, df = _make_spark_model(self._spark)
 		with mlflow.start_run() as run:
 			log_model(spark_model, artifact_path = "model", input_example = df.sample(fraction = 0.1))
+
 		model_path = download_artifacts(f"runs:/{run.info.run_id}/model")
 		mlflow_spark_model = Model.load(model_path)
 		self.assertIn("spark", mlflow_spark_model.flavors)

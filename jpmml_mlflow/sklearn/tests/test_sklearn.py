@@ -8,10 +8,11 @@ import mlflow
 
 class SkLearnTest(MLflowTest):
 
-	def test_decision_tree_iris(self):
+	def test_sk_model(self):
 		sk_model = _make_sk_model()
 		with mlflow.start_run() as run:
 			log_model(sk_model, artifact_path = "model")
+
 		model_path = download_artifacts(f"runs:/{run.info.run_id}/model")
 		mlflow_sk_model = Model.load(model_path)
 		self.assertIn("sklearn", mlflow_sk_model.flavors)

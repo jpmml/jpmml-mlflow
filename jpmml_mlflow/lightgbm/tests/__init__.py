@@ -1,0 +1,26 @@
+from jpmml_mlflow.sklearn.tests import _load_iris
+from lightgbm import Dataset, LGBMClassifier
+
+import lightgbm
+
+def _make_lgb_booster():
+	iris_X, iris_y = _load_iris()
+	# Encode labels from string to numeric
+	iris_y = iris_y.astype("category").cat.codes
+	iris_ds = Dataset(iris_X, label = iris_y)
+
+	lgb_params = {
+		"max_depth" : 3,
+		"num_iterations" : 7
+	}
+	booster = lightgbm.train(lgb_params, iris_ds)
+
+	return booster
+
+def _make_lgb_model():
+	iris_X, iris_y = _load_iris()
+
+	model = LGBMClassifier(max_depth = 3, n_estimators = 7, random_state = 42)
+	model.fit(iris_X, iris_y)
+
+	return model
