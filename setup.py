@@ -51,6 +51,10 @@ setup(
 		"spark" : [
 			"pyspark>=3.0",
 			"pyspark2pmml>=0.10.0",
+		],
+		"xgboost" : [
+			"xgboost",
+			"sklearn2pmml",
 		]
 	},
 )

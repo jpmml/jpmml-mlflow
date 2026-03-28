@@ -3,3 +3,4 @@ lightgbm
 pyspark2pmml>=0.10.0
 scikit-learn
 sklearn2pmml
+xgboost
