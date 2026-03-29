@@ -21,7 +21,9 @@
 
 	<properties>
 		<jpmml-converter.version></jpmml-converter.version>
+		<jpmml-lightgbm.version></jpmml-lightgbm.version>
 		<jpmml-sparkml.version></jpmml-sparkml.version>
+		<jpmml-xgboost.version></jpmml-xgboost.version>
 	</properties>
 
 	<dependencyManagement>
@@ -40,6 +42,18 @@
 
 			<dependency>
 				<groupId>org.jpmml</groupId>
+				<artifactId>pmml-lightgbm</artifactId>
+				<version>${jpmml-lightgbm.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.jpmml</groupId>
+						<artifactId>pmml-converter-testing</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jpmml</groupId>
 				<artifactId>pmml-sparkml</artifactId>
 				<version>${jpmml-sparkml.version}</version>
 				<exclusions>
@@ -47,6 +61,40 @@
 						<groupId>org.jpmml</groupId>
 						<artifactId>pmml-converter</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>org.jpmml</groupId>
+						<artifactId>pmml-converter-testing</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.jpmml</groupId>
+				<artifactId>pmml-sparkml-lightgbm</artifactId>
+				<version>${jpmml-sparkml.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.jpmml</groupId>
+						<artifactId>pmml-lightgbm</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.jpmml</groupId>
+				<artifactId>pmml-sparkml-xgboost</artifactId>
+				<version>${jpmml-sparkml.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.jpmml</groupId>
+						<artifactId>pmml-xgboost</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jpmml</groupId>
+				<artifactId>pmml-xgboost</artifactId>
+				<version>${jpmml-xgboost.version}</version>
+				<exclusions>
 					<exclusion>
 						<groupId>org.jpmml</groupId>
 						<artifactId>pmml-converter-testing</artifactId>

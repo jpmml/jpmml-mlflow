@@ -12,12 +12,24 @@
 
 	<properties>
 		<jpmml-converter.version>1.6.9</jpmml-converter.version>
+		<jpmml-lightgbm.version>1.6.5</jpmml-lightgbm.version>
+		<jpmml-xgboost.version>1.9.6</jpmml-xgboost.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jpmml</groupId>
 			<artifactId>pmml-converter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jpmml</groupId>
+			<artifactId>pmml-lightgbm</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jpmml</groupId>
+			<artifactId>pmml-xgboost</artifactId>
 		</dependency>
 	</dependencies>
 </project>

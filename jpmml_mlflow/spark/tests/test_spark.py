@@ -17,12 +17,12 @@ class SparkTest(PySparkTest):
 		spark40_jars = classpath("4.0.")
 		spark41_jars = classpath("4.1.")
 
-		self.assertEqual(1 + 10, len(spark34_jars))
-		self.assertEqual(1 + 10, len(spark35_jars))
-		self.assertEqual(1 + 10, len(spark40_jars))
-		self.assertEqual(1 + 10, len(spark41_jars))
-		self.assertNotEqual(spark34_jars[0], spark41_jars[0])
-		self.assertEqual(set(spark34_jars[1:]), set(spark41_jars[1:]))
+		self.assertEqual(3 + 15, len(spark34_jars))
+		self.assertEqual(3 + 15, len(spark35_jars))
+		self.assertEqual(3 + 15, len(spark40_jars))
+		self.assertEqual(3 + 15, len(spark41_jars))
+		self.assertNotEqual(set(spark34_jars[0:3]), set(spark41_jars[0:3]))
+		self.assertEqual(set(spark34_jars[3:]), set(spark41_jars[3:]))
 
 	def test_spark_model(self):
 		spark_model, df = _make_spark_model(self._spark)

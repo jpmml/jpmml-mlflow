@@ -19,5 +19,13 @@
 			<groupId>org.jpmml</groupId>
 			<artifactId>pmml-sparkml</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jpmml</groupId>
+			<artifactId>pmml-sparkml-lightgbm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jpmml</groupId>
+			<artifactId>pmml-sparkml-xgboost</artifactId>
+		</dependency>
 	</dependencies>
 </project>
