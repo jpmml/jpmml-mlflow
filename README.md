@@ -6,15 +6,15 @@ PMML model flavors for MLflow.
 # Motivation #
 
 Every MLflow model artifact has at least one flavor.
-The current flavors (eg. pickle, cloudpickle, ONNX) are **binary** and optimized for **machine execution**.
-They are clearly inadequate for model governance tasks.
+The current flavors (eg. pickle, cloudpickle, ONNX) are optimized for **machine execution**.
 
-Adding PMML as an extra flavor alongside the default flavor(s) opens up models to **humans** and **AI agents** to tackle **higher-order problems**.
+Adding a PMML flavor to the default flavor(s) opens up models to **humans** and **AI agents** natively, enabling **higher-order tasks** such as model governance and AI-assisted data science.
 
-JPMML-MLflow is the bridge between the [Java PMML API](https://github.com/jpmml) ecosystem and [MLflow](https://mlflow.org/).
-JPMML-MLflow makes your Tabular ML models AI-ready.
+Toggle the PMML flavor "on" or "off" with a one-line code change.
 
 # Features #
+
+JPMML-MLflow is the bridge between [Java PMML API](https://github.com/jpmml) and [MLflow](https://mlflow.org/).
 
 The Predictive Model Markup Language (PMML) is an XML-based industry standard for representing statistical and data mining models.
 PMML is first and foremost **applicable to structured data** workflows.
@@ -58,7 +58,7 @@ Installing into a new environment:
 
 ```bash
 # Conversion side flavors
-pip install jpmml-mlflow[sklearn,spark]
+pip install jpmml-mlflow[sklearn,lightgbm,spark,xgboost]
 # Evaluation side flavors
 pip install jpmml-mlflow[evaluator,evaluator-spark]
 ```
@@ -70,8 +70,10 @@ Summary of PMML flavor modules:
 * Foundation:
   * `jpmml_mlflow.pmml`. Saves and loads PMML XML documents as UTF-8 byte arrays (blobs).
 * Conversion side:
+  * `jpmml_mlflow.lightgbm`. Extends `mlflow.lightgbm` with PMML save when logging or saving a LightGBM artifact.
   * `jpmml_mlflow.sklearn`. Extends `mlflow.sklearn` with PMML save when logging or saving a Scikit-Learn artifact.
   * `jpmml_mlflow.spark`. Extends `mlflow.spark` with PMML save when logging or saving a PySpark artifact.
+  * `jpmml_mlflow.xgboost`. Extends `mlflow.xgboost` with PMML save when logging or saving an XGBoost artifact.
 * Evaluation side:
   * `jpmml_mlflow.evaluator`. Loads PMML into a JPMML-Evaluator artifact.
   * `jpmml_mlflow.evaluator-spark`. Extends `jpmml_mlflow.evaluator` with PySpark transformer support when loading a JPMML-Evaluator artifact.
@@ -118,7 +120,7 @@ with mlflow.start_run():
 	# Default Scikit-Learn state
 	mlflow.sklearn.save_model(sk_model, path = workspace_dir, mlflow_model = mlflow_model)
 	# Convert Scikit-Learn to PMML by whatever means
-	pmml_path = _convert(sk_model)
+	pmml_path = convert_model(sk_model)
 	# PMML flavor state
 	jpmml_mlflow.pmml.save_model(pmml_path, path = workspace_dir, mlflow_model = mlflow_model)
 
@@ -149,6 +151,21 @@ pmml_bytes = jpmml_mlflow.pmml.load_model(f"runs:/{run_id}/model")
 ```
 
 ## Conversion side
+
+### `jpmml_mlflow.lightgbm`
+
+A PMML-aware replacement for the `mlflow.lightgbm` module.
+
+```python
+import jpmml_mlflow.lightgbm
+import mlflow
+#import mlflow.lightgbm
+
+with mlflow.start_run():
+	jpmml_mlflow.lightgbm.log_model(lgb_model, name = "model")
+```
+
+The LightGBM artifact can be either a `lightgbm.Booster` or a Scikit-Learn wrapper class.
 
 ### `jpmml_mlflow.sklearn`
 
@@ -207,6 +224,21 @@ spark = SparkSession.builder \
 	.config("spark.jars", ",".join(spark_jars)) \
 	.getOrCreate()
 ```
+
+### `jpmml_mlflow.xgboost`
+
+A PMML-aware replacement for the `mlflow.xgboost` module.
+
+```python
+import jpmml_mlflow.xgboost
+import mlflow
+#import mlflow.xgboost
+
+with mlflow.start_run():
+	jpmml_mlflow.xgboost.log_model(xgb_model, name = "model")
+```
+
+The XGBoost artifact can be either a `xgboost.Booster` or a Scikit-Learn wrapper class.
 
 ## Evaluation side
 
