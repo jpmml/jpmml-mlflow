@@ -13,7 +13,7 @@ def add_pmml_flavor(module, mlflow_module, model_kwarg, convert_model, convert_m
 	def save_model(model = None, path = None, mlflow_model: Optional[Model] = None, signature: Optional[ModelSignature] = None, **kwargs) -> None:
 		model = model if model is not None else kwargs.pop(model_kwarg)
 
-		pmml_path = convert_model(model, **{k : kwargs.pop(k) for k in convert_model_kwargs})
+		pmml_path = convert_model(model, **{k : kwargs.pop(k) for k in convert_model_kwargs if k in kwargs})
 
 		if mlflow_model is None:
 			mlflow_model = Model()

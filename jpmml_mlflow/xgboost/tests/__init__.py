@@ -1,21 +1,24 @@
 from jpmml_mlflow.sklearn.tests import _load_iris
+from sklearn2pmml.xgboost import make_feature_map
 from xgboost import DMatrix, XGBClassifier
 
 import xgboost
 
 def _make_xgb_booster():
 	iris_X, iris_y = _load_iris()
+	iris_fmap = make_feature_map(iris_X)
+	# Anonymize columns
+	iris_X = iris_X.values
 	# Encode labels from string to numeric
 	iris_y = iris_y.astype("category").cat.codes
 	iris_dm = DMatrix(iris_X, label = iris_y)
 
 	xgb_params = {
-		"max_depth" : 3,
-		"num_boost_round" : 7
+		"max_depth" : 3
 	}
-	booster = xgboost.train(xgb_params, iris_dm)
+	booster = xgboost.train(xgb_params, iris_dm, num_boost_round = 7)
 
-	return booster
+	return (booster, iris_fmap)
 
 def _make_xgb_model():
 	iris_X, iris_y = _load_iris()

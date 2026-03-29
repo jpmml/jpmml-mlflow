@@ -1,10 +1,17 @@
 from jpmml_mlflow.flavor import add_pmml_flavor
+from pandas import DataFrame
+from typing import Optional
+from xgboost import Booster
 
 import jpmml_mlflow.sklearn
 import mlflow.xgboost
 
 import sys
 
-convert_model = jpmml_mlflow.sklearn.convert_model
+def convert_model(xgb_model, fmap = None) -> Optional[str]:
+	if isinstance(xgb_model, Booster) and isinstance(fmap, DataFrame):
+		xgb_model.fmap = fmap
 
-log_model, save_model, load_model = add_pmml_flavor(sys.modules[__name__], mlflow.xgboost, "xgb_model", convert_model)
+	return jpmml_mlflow.sklearn.convert_model(xgb_model)
+
+log_model, save_model, load_model = add_pmml_flavor(sys.modules[__name__], mlflow.xgboost, "xgb_model", convert_model, ("fmap", ))
