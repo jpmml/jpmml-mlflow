@@ -29,6 +29,10 @@ PMML is a single-file text-based representation, which makes it suitable for dir
 PMML is equally suitable for execution.
 In fact, the [JPMML-Evaluator](https://github.com/jpmml/jpmml-evaluator) library has high-quality and high-performance integrations available for all major ML platforms such as Python, R and Apache Spark (both Scala and PySpark variants).
 
+# News and Updates #
+
+See the [NEWS.md](https://github.com/jpmml/jpmml-mlflow/blob/master/NEWS.md) file.
+
 # Prerequisites #
 
 * MLflow 2.X or 3.X.
