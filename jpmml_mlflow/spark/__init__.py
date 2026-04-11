@@ -2,6 +2,7 @@ from jpmml_mlflow.flavor import add_pmml_flavor
 from jpmml_mlflow.spark import shared, spark34, spark35, spark40, spark41
 from jpmml_mlflow.util import load_classpath
 from mlflow.models import Model
+from mlflow.models.signature import ModelSignature
 from pyspark2pmml import PMMLBuilder
 from types import ModuleType
 from typing import List, Optional
@@ -39,7 +40,7 @@ def classpath(version: str = None) -> List[str]:
 
 	return spark_jars + shared_jars
 
-def convert_model(spark_model, input_example_schema) -> Optional[str]:
+def convert_model(spark_model, input_example_schema, signature: Optional[ModelSignature] = None) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
 	os.close(fd)
 

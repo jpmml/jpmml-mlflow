@@ -1,4 +1,5 @@
 from jpmml_mlflow.flavor import add_pmml_flavor
+from mlflow.models.signature import ModelSignature
 from sklearn2pmml import sklearn2pmml
 from typing import Optional
 
@@ -11,7 +12,7 @@ import tempfile
 
 _logger = logging.getLogger(__name__)
 
-def convert_model(obj) -> Optional[str]:
+def convert_model(obj, signature: Optional[ModelSignature] = None) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
 	os.close(fd)
 
