@@ -6,6 +6,7 @@ from pyspark.sql import SparkSession
 from typing import List
 from unittest import TestCase
 
+import jpmml_mlflow.pmml
 import mlflow
 import os
 import pandas
@@ -44,6 +45,14 @@ class MLflowTest(TestCase):
 		mlflow_model = Model.load(model_path)
 		for expected_flavor in expected_flavors:
 			self.assertIn(expected_flavor, mlflow_model.flavors)
+
+	def assertSchema(self, run, required_fields = [], prohibited_fields = []):
+		pmml_bytes = jpmml_mlflow.pmml.load_model(f"runs:/{run.info.run_id}/model")
+		pmml_str = pmml_bytes.decode("utf-8")
+		for required_field in required_fields:
+			self.assertIn(required_field, pmml_str)
+		for prohibited_field in prohibited_fields:
+			self.assertNotIn(prohibited_field, pmml_str)
 
 class PySparkTest(MLflowTest, ABC):
 
