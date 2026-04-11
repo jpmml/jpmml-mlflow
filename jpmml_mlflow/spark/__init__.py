@@ -2,6 +2,7 @@ from jpmml_mlflow.flavor import add_pmml_flavor
 from jpmml_mlflow.spark import shared, spark34, spark35, spark40, spark41
 from jpmml_mlflow.util import load_classpath
 from mlflow.models import Model
+from pyspark2pmml import PMMLBuilder
 from types import ModuleType
 from typing import List, Optional
 
@@ -43,8 +44,6 @@ def convert_model(spark_model, input_example_schema) -> Optional[str]:
 	os.close(fd)
 
 	try:
-		from pyspark2pmml import PMMLBuilder
-
 		PMMLBuilder(input_example_schema, spark_model) \
 			.buildFile(pmml_path)
 		return pmml_path

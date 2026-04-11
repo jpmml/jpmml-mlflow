@@ -1,4 +1,5 @@
 from jpmml_mlflow.flavor import add_pmml_flavor
+from sklearn2pmml import sklearn2pmml
 from typing import Optional
 
 import mlflow.sklearn
@@ -15,8 +16,6 @@ def convert_model(obj) -> Optional[str]:
 	os.close(fd)
 
 	try:
-		from sklearn2pmml import sklearn2pmml
-
 		sklearn2pmml(obj, pmml_path)
 		return pmml_path
 	except:
