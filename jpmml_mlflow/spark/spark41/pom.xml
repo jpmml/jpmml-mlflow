@@ -11,7 +11,7 @@
 	<artifactId>jpmml-mlflow-spark41</artifactId>
 
 	<properties>
-		<jpmml-sparkml.version>3.3.2</jpmml-sparkml.version>
+		<jpmml-sparkml.version>3.3.3</jpmml-sparkml.version>
 	</properties>
 
 	<dependencies>
