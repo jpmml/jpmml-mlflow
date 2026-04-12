@@ -10,15 +10,15 @@ def add_pmml_flavor(module, mlflow_module, model_kwarg, convert_model, convert_m
 	def log_model(model, artifact_path = None, registered_model_name = None, name = None, **kwargs) -> ModelInfo:
 		return Model.log(artifact_path = name or artifact_path, flavor = module, registered_model_name = registered_model_name, **{model_kwarg : model}, **kwargs)
 
-	def save_model(model = None, path = None, mlflow_model: Optional[Model] = None, signature: Optional[ModelSignature] = None, **kwargs) -> None:
+	def save_model(model = None, path = None, mlflow_model: Optional[Model] = None, signature: Optional[ModelSignature] = None, input_example = None, **kwargs) -> None:
 		model = model if model is not None else kwargs.pop(model_kwarg)
 
-		pmml_path = convert_model(model, signature = signature, **{k : kwargs.pop(k) for k in convert_model_kwargs if k in kwargs})
+		pmml_path = convert_model(model, signature = signature, input_example = input_example, **{k : kwargs.pop(k) for k in convert_model_kwargs if k in kwargs})
 
 		if mlflow_model is None:
 			mlflow_model = Model()
 
-		mlflow_module.save_model(model, path = path, mlflow_model = mlflow_model, signature = signature, **kwargs)
+		mlflow_module.save_model(model, path = path, mlflow_model = mlflow_model, signature = signature, input_example = input_example, **kwargs)
 		if pmml_path is not None:
 			jpmml_mlflow.pmml.save_model(pmml_path, path = path, mlflow_model = mlflow_model)
 

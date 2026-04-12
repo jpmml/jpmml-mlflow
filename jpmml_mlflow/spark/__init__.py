@@ -40,7 +40,7 @@ def classpath(version: str = None) -> List[str]:
 
 	return spark_jars + shared_jars
 
-def convert_model(spark_model, input_example_schema, signature: Optional[ModelSignature] = None) -> Optional[str]:
+def convert_model(spark_model, input_example_schema, signature: Optional[ModelSignature] = None, input_example = None) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
 	os.close(fd)
 

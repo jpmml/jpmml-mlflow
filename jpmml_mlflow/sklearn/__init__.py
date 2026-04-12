@@ -27,7 +27,7 @@ def enhance_model(obj, signature: ModelSignature):
 		_logger.warning("Failed to enhance model artifact with signature")
 	return obj
 
-def convert_model(obj, signature: Optional[ModelSignature] = None) -> Optional[str]:
+def convert_model(obj, signature: Optional[ModelSignature] = None, input_example = None) -> Optional[str]:
 
 	if signature is not None:
 		obj = enhance_model(obj, signature)
