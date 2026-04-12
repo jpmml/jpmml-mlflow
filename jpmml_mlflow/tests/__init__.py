@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from lxml import etree
 from mlflow.artifacts import download_artifacts
 from mlflow.models import Model
 from pyspark.context import SparkContext
@@ -46,13 +47,21 @@ class MLflowTest(TestCase):
 		for expected_flavor in expected_flavors:
 			self.assertIn(expected_flavor, mlflow_model.flavors)
 
-	def assertSchema(self, run, required_fields = [], prohibited_fields = []):
+	def assertPMML(self, run, true_xpaths = [], false_xpaths = []):
 		pmml_bytes = jpmml_mlflow.pmml.load_model(f"runs:/{run.info.run_id}/model")
-		pmml_str = pmml_bytes.decode("utf-8")
-		for required_field in required_fields:
-			self.assertIn(required_field, pmml_str)
-		for prohibited_field in prohibited_fields:
-			self.assertNotIn(prohibited_field, pmml_str)
+		pmml_root = etree.fromstring(pmml_bytes)
+		nsmap = {
+			"pmml" : "http://www.dmg.org/PMML-4_4"
+		}
+		for true_xpath in true_xpaths:
+			self.assertIsNotNone(pmml_root.find(true_xpath, nsmap), "Expected XPath '{}' not found in PMML".format(true_xpath))
+		for false_xpath in false_xpaths:
+			self.assertIsNone(pmml_root.find(false_xpath, nsmap), "Unexpected XPath '{}' found in PMML".format(false_xpath))
+
+	def assertSignature(self, run, required_fields = [], prohibited_fields = []):
+		true_xpaths = [".//pmml:DataField[@name='{}']".format(f) for f in required_fields]
+		false_xpaths = [".//pmml:DataField[@name='{}']".format(f) for f in prohibited_fields]
+		self.assertPMML(run, true_xpaths = true_xpaths, false_xpaths = false_xpaths)
 
 class PySparkTest(MLflowTest, ABC):
 

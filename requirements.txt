@@ -1,5 +1,6 @@
 jpmml-evaluator-pyspark
 lightgbm
+lxml>=5.0
 pyspark2pmml>=0.10.0
 scikit-learn
 sklearn2pmml
