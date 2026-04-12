@@ -63,6 +63,11 @@ class MLflowTest(TestCase):
 		false_xpaths = [".//pmml:DataField[@name='{}']".format(f) for f in prohibited_fields]
 		self.assertPMML(run, true_xpaths = true_xpaths, false_xpaths = false_xpaths)
 
+	def assertInputExample(self, run, fields, n_samples = 10):
+		true_xpaths = [".//pmml:ModelVerification/pmml:VerificationFields/pmml:VerificationField[@field='{}']".format(field) for field in fields]
+		true_xpaths.append(".//pmml:ModelVerification/pmml:InlineTable/pmml:row[{}]".format(n_samples))
+		self.assertPMML(run, true_xpaths = true_xpaths)
+
 class PySparkTest(MLflowTest, ABC):
 
 	@classmethod

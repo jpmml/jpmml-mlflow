@@ -14,8 +14,9 @@ class SkLearnTest(MLflowTest):
 		self.assertSignature(run, required_fields = ["y", "x3", "x4"])
 
 	def test_sk_model_with_signature(self):
-		sk_model, signature = _make_sk_model(with_signature = True)
+		sk_model, signature, input_example = _make_sk_model(with_signature = True)
 		with mlflow.start_run() as run:
-			log_model(sk_model, signature = signature, artifact_path = "model")
+			log_model(sk_model, signature = signature, input_example = input_example, artifact_path = "model")
 		self.assertFlavors(run, ["sklearn", "pmml"])
 		self.assertSignature(run, required_fields = ["Species", "Petal_Length", "Petal_Width"])
+		self.assertInputExample(run, ["Petal_Length", "Petal_Width"] + ["probability({})".format(label) for label in ["setosa", "versicolor", "virginica"]])

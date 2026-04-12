@@ -9,9 +9,10 @@ def _make_sk_model(with_signature = False):
 
 	if with_signature:
 		signature = infer_signature(iris_X, iris_y)
+		input_example = iris_X.sample(n = 10, random_state = 42)
 
 		model.fit(iris_X, iris_y)
-		return (model, signature)
+		return (model, signature, input_example)
 	else:
 		model.fit(iris_X.values, iris_y.values)
 		return model
