@@ -11,10 +11,12 @@ class XGBoostTest(MLflowTest):
 		with mlflow.start_run() as run:
 			log_model(xgb_booster, artifact_path = "model", fmap = fmap)
 		self.assertFlavors(run, ["xgboost", "pmml"])
-		self.assertSignature(run, required_fields = ["Sepal_Length", "Petal_Length"], prohibited_fields = ["x1"])
+		self.assertSignature(run, required_fields = ["Sepal_Length", "Petal_Length"], prohibited_fields = ["x1", "x2", "x3", "x4"])
 
 	def test_xgb_model(self):
-		xgb_model = _make_xgb_model()
+		xgb_model, signature, input_example = _make_xgb_model(with_names = False)
 		with mlflow.start_run() as run:
-			log_model(xgb_model, artifact_path = "model")
+			log_model(xgb_model, signature = signature, input_example = input_example, artifact_path = "model")
 		self.assertFlavors(run, ["xgboost", "pmml"])
+		self.assertIrisSignature(run)
+		self.assertIrisInputExample(run, labels = xgb_model.classes_)

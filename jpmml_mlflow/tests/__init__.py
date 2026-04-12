@@ -68,6 +68,12 @@ class MLflowTest(TestCase):
 		true_xpaths.append(".//pmml:ModelVerification/pmml:InlineTable/pmml:row[{}]".format(n_samples))
 		self.assertPMML(run, true_xpaths = true_xpaths)
 
+	def assertIrisSignature(self, run):
+		self.assertSignature(run,  required_fields = ["Species"] + ["Petal_Length"], prohibited_fields = ["y"] + ["x1", "x2", "x3", "x4"])
+
+	def assertIrisInputExample(self, run, labels = ["setosa", "versicolor", "virginica"]):
+		self.assertInputExample(run, ["Petal_Length"] + ["probability({})".format(label) for label in labels])
+
 class PySparkTest(MLflowTest, ABC):
 
 	@classmethod

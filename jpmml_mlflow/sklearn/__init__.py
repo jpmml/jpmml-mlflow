@@ -30,13 +30,13 @@ def enhance_model(obj, signature: ModelSignature):
 
 	return obj
 
-def convert_model(obj, signature: Optional[ModelSignature] = None, input_example = None) -> Optional[str]:
+def convert_model(obj, signature: Optional[ModelSignature] = None, input_example = None, precision = 1e-13, zeroThreshold = 1e-13) -> Optional[str]:
 
 	if signature is not None:
 		obj = enhance_model(obj, signature)
 
 	if (input_example is not None) and isinstance(obj, PMMLPipeline):
-		obj.verify(input_example)
+		obj.verify(input_example, precision = precision, zeroThreshold = zeroThreshold)
 
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
 	os.close(fd)

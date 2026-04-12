@@ -13,6 +13,11 @@ def convert_model(xgb_model, signature: Optional[ModelSignature] = None, input_e
 	if isinstance(xgb_model, Booster) and isinstance(fmap, DataFrame):
 		xgb_model.fmap = fmap
 
-	return jpmml_mlflow.sklearn.convert_model(xgb_model, signature = signature, input_example = input_example)
+	verify_kwargs = {
+		"precision" : 1e-5,
+		"zeroThreshold" : 1e-5
+	}
+
+	return jpmml_mlflow.sklearn.convert_model(xgb_model, signature = signature, input_example = input_example, **verify_kwargs)
 
 log_model, save_model, load_model = add_pmml_flavor(sys.modules[__name__], mlflow.xgboost, "xgb_model", convert_model, ("fmap", ))

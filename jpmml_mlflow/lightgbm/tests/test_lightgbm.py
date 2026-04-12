@@ -13,7 +13,9 @@ class LightGBMTest(MLflowTest):
 		self.assertFlavors(run, ["lightgbm", "pmml"])
 
 	def test_lgb_model(self):
-		lgb_model = _make_lgb_model()
+		lgb_model, signature, input_example = _make_lgb_model(with_names = False)
 		with mlflow.start_run() as run:
-			log_model(lgb_model, artifact_path = "model")
+			log_model(lgb_model, signature = signature, input_example = input_example, artifact_path = "model")
 		self.assertFlavors(run, ["lightgbm", "pmml"])
+		self.assertIrisSignature(run)
+		self.assertIrisInputExample(run, labels = lgb_model.classes_)
