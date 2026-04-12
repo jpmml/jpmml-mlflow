@@ -25,7 +25,9 @@ class SparkTest(PySparkTest):
 		self.assertEqual(set(spark34_jars[3:]), set(spark41_jars[3:]))
 
 	def test_spark_model(self):
-		spark_model, df = _make_spark_model(self._spark)
+		spark_model, _, input_example = _make_spark_model(self._spark)
 		with mlflow.start_run() as run:
-			log_model(spark_model, artifact_path = "model", input_example = df.sample(fraction = 0.1))
+			log_model(spark_model, input_example = input_example, artifact_path = "model")
 		self.assertFlavors(run, ["spark", "pmml"])
+		self.assertIrisSignature(run)
+		self.assertIrisInputExample(run)
