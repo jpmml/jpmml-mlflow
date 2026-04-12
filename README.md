@@ -49,7 +49,7 @@ pip install jpmml-mlflow
 
 Alternatively, installing the latest snapshot version from GitHub:
 
-```
+```bash
 pip install --upgrade git+https://github.com/jpmml/jpmml-mlflow.git
 ```
 
