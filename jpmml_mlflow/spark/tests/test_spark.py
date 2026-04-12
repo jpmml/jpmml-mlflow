@@ -27,7 +27,7 @@ class SparkTest(PySparkTest):
 	def test_spark_model(self):
 		spark_model, _, input_example = _make_spark_model(self._spark)
 		with mlflow.start_run() as run:
-			log_model(spark_model, input_example = input_example, artifact_path = "model")
+			log_model(spark_model, artifact_path = "model", input_example = input_example)
 		self.assertFlavors(run, ["spark", "pmml"])
 		self.assertIrisSignature(run)
 		self.assertIrisInputExample(run)

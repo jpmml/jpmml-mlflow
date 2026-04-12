@@ -16,7 +16,7 @@ class SkLearnTest(MLflowTest):
 	def test_sk_model(self):
 		sk_model, signature, input_example = _make_sk_model(with_names = False)
 		with mlflow.start_run() as run:
-			log_model(sk_model, signature = signature, input_example = input_example, artifact_path = "model")
+			log_model(sk_model, artifact_path = "model", signature = signature, input_example = input_example)
 		self.assertFlavors(run, ["sklearn", "pmml"])
 		self.assertIrisSignature(run)
 		self.assertIrisInputExample(run, labels = sk_model.classes_)
