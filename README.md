@@ -29,6 +29,16 @@ PMML is a single-file text-based representation, which makes it suitable for dir
 PMML is equally suitable for execution.
 In fact, the [JPMML-Evaluator](https://github.com/jpmml/jpmml-evaluator) library has high-quality and high-performance integrations available for all major ML platforms such as Python, R and Apache Spark (both Scala and PySpark variants).
 
+# Quick Start #
+
+The following Jupyter notebook demonstrates an end-to-end workflow:
+
+1. **Train**. A Scikit-Learn XGBoost pipeline with categorical features and missing data.
+2. **Log**. JPMML-MLflow enhances MLflow model artifacts with a PMML flavor.
+3. **Deploy**. A PySpark transformer based on the PMML flavor for native JVM scoring. Zero Scikit-Learn or XGBoost dependence, zero data serialization overhead.
+
+:rocket: [Scoring Scikit-Learn XGBoost pipelines natively on PySpark](sklearn-xgboost-pyspark.ipynb)
+
 # News and Updates #
 
 See the [NEWS.md](https://github.com/jpmml/jpmml-mlflow/blob/master/NEWS.md) file.
