@@ -37,7 +37,7 @@ The following Jupyter notebook demonstrates an end-to-end workflow:
 2. **Log**. JPMML-MLflow enhances MLflow model artifacts with a PMML flavor.
 3. **Deploy**. A PySpark transformer based on the PMML flavor for native JVM scoring. Zero Scikit-Learn or XGBoost dependence, zero data serialization overhead.
 
-:rocket: [Scoring Scikit-Learn XGBoost pipelines natively on PySpark](sklearn-xgboost-pyspark.ipynb)
+:rocket: **Scoring Scikit-Learn XGBoost pipelines natively on PySpark**: [View on GitHub](sklearn-xgboost-pyspark.ipynb) | [Open on Google Colab](https://colab.research.google.com/github/jpmml/jpmml-mlflow/blob/master/sklearn-xgboost-pyspark.ipynb)
 
 # News and Updates #
 
