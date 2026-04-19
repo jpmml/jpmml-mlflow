@@ -36,7 +36,7 @@ setup(
 			"py4j",
 		],
 		"evaluator-spark" : [
-			"jpmml-evaluator-pyspark",
+			"jpmml-evaluator-pyspark>=0.3.0",
 			"py4j",
 			"pyspark>=3.0",
 		],

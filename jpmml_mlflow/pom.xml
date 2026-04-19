@@ -13,7 +13,6 @@
 
 	<modules>
 		<module>evaluator</module>
-		<module>evaluator_spark</module>
 	</modules>
 
 	<properties>

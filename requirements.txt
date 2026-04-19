@@ -1,4 +1,4 @@
-jpmml-evaluator-pyspark
+jpmml-evaluator-pyspark>=0.3.0
 lightgbm
 lxml>=5.0
 pyspark2pmml>=0.11.0
