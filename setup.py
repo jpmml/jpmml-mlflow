@@ -50,7 +50,7 @@ setup(
 		],
 		"spark" : [
 			"pyspark>=3.0",
-			"pyspark2pmml>=0.10.0",
+			"pyspark2pmml>=0.11.0",
 		],
 		"xgboost" : [
 			"xgboost",

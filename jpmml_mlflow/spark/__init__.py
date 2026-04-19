@@ -1,45 +1,21 @@
 from jpmml_mlflow.flavor import add_pmml_flavor
-from jpmml_mlflow.spark import shared, spark34, spark35, spark40, spark41
-from jpmml_mlflow.util import load_classpath
 from mlflow.models import Model
 from mlflow.models.signature import ModelSignature
 from pyspark.sql import SparkSession
-from pyspark2pmml import PMMLBuilder
-from types import ModuleType
+from pyspark2pmml import _jars, PMMLBuilder
 from typing import List, Optional
 
 import mlflow.spark
 
 import logging
 import os
-import pyspark
 import sys
 import tempfile
 
 _logger = logging.getLogger(__name__)
 
-def _spark_module(version: str) -> ModuleType:
-	if version.startswith("3.4."):
-		return spark34
-	elif version.startswith("3.5."):
-		return spark35
-	elif version.startswith("4.0."):
-		return spark40
-	elif version.startswith("4.1."):
-		return spark41
-	else:
-		raise ValueError(f"Apache Spark version {version} is not supported")
-
 def classpath(version: str = None) -> List[str]:
-	if version is None:
-		version = pyspark.__version__
-
-	spark_module = _spark_module(version)
-	spark_jars = load_classpath(os.path.dirname(spark_module.__file__))
-
-	shared_jars = load_classpath(os.path.dirname(shared.__file__))
-
-	return spark_jars + shared_jars
+	return _jars(version = version)
 
 def convert_model(spark_model, input_example_schema, signature: Optional[ModelSignature] = None, input_example = None) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
