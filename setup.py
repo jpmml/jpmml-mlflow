@@ -21,9 +21,6 @@ setup(
 		"Topic :: Scientific/Engineering"
 	],
 	packages = find_packages(exclude = ["*.tests.*", "*.tests"]),
-	package_data = {
-		"" : ["resources/*.jar"],
-	},
 	exclude_package_data = {
 		"" : ["README.md"],
 	},
@@ -32,9 +29,6 @@ setup(
 		"mlflow>=2.0",
 	],
 	extras_require = {
-		"evaluator" : [
-			"py4j",
-		],
 		"evaluator-spark" : [
 			"jpmml-evaluator-pyspark>=0.3.0",
 			"py4j",

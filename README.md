@@ -89,8 +89,7 @@ Summary of PMML flavor modules:
   * `jpmml_mlflow.spark`. Extends `mlflow.spark` with PMML save when logging or saving a PySpark artifact.
   * `jpmml_mlflow.xgboost`. Extends `mlflow.xgboost` with PMML save when logging or saving an XGBoost artifact.
 * Evaluation side:
-  * `jpmml_mlflow.evaluator`. Loads PMML into a JPMML-Evaluator artifact.
-  * `jpmml_mlflow.evaluator-spark`. Extends `jpmml_mlflow.evaluator` with PySpark transformer support when loading a JPMML-Evaluator artifact.
+  * `jpmml_mlflow.evaluator-spark`. Loads PMML into a JPMML-Evaluator artifact, which then becomes a PySpark transformer.
 
 ## Foundation
 
