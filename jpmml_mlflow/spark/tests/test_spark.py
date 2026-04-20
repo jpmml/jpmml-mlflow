@@ -1,15 +1,14 @@
 from jpmml_mlflow.tests import PySparkTest
-from jpmml_mlflow.spark import classpath, log_model
+from jpmml_mlflow.spark import spark_jars, log_model
 from jpmml_mlflow.spark.tests import _make_spark_model
-from typing import List
 
 import mlflow
 
 class SparkTest(PySparkTest):
 
 	@classmethod
-	def _spark_jars(cls) -> List[str]:
-		return classpath()
+	def _spark_jars(cls) -> str:
+		return spark_jars()
 
 	def test_spark_model(self):
 		spark_model, _, input_example = _make_spark_model(self._spark)

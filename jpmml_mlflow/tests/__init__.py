@@ -4,7 +4,6 @@ from mlflow.artifacts import download_artifacts
 from mlflow.models import Model
 from pyspark.context import SparkContext
 from pyspark.sql import SparkSession
-from typing import List
 from unittest import TestCase
 
 import jpmml_mlflow.pmml
@@ -78,14 +77,14 @@ class PySparkTest(MLflowTest, ABC):
 
 	@classmethod
 	@abstractmethod
-	def _spark_jars(cls) -> List[str]:
+	def _spark_jars(cls) -> str:
 		raise NotImplementedError()
 
 	@classmethod
 	def setUpClass(cls):
 		cls._spark = SparkSession.builder \
 			.master("local") \
-			.config("spark.jars", ",".join(cls._spark_jars())) \
+			.config("spark.jars", cls._spark_jars()) \
 			.getOrCreate()
 
 	@classmethod

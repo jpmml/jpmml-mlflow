@@ -1,6 +1,6 @@
 from jpmml_evaluator_pyspark import FlatPMMLTransformer, NestedPMMLTransformer
 from jpmml_mlflow.tests import _find_resource, _load_resource, PySparkTest
-from jpmml_mlflow.evaluator_spark import classpath, load_model, log_model
+from jpmml_mlflow.evaluator_spark import spark_jars, load_model, log_model
 from py4j.java_gateway import JavaObject
 from typing import List
 
@@ -11,8 +11,8 @@ PMML_BYTES = _load_resource("DecisionTreeIris.pmml")
 class JPMMLEvaluatorSparkTest(PySparkTest):
 
 	@classmethod
-	def _spark_jars(cls) -> List[str]:
-		return classpath()
+	def _spark_jars(cls) -> str:
+		return spark_jars()
 
 	def test_log_load(self):
 		jvm = self._spark._jvm

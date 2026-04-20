@@ -1,11 +1,10 @@
-from jpmml_evaluator_pyspark import _jars
 from jpmml_mlflow import pmml
 from py4j.java_gateway import JavaObject, JVMView
 from pyspark.sql import SparkSession
-from typing import List
 
-def classpath(version: str = None) -> List[str]:
-	return _jars(version = version)
+import jpmml_evaluator_pyspark
+
+spark_jars = jpmml_evaluator_pyspark.spark_jars
 
 log_model = pmml.log_model
 

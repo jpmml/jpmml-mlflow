@@ -2,20 +2,20 @@ from jpmml_mlflow.flavor import add_pmml_flavor
 from mlflow.models import Model
 from mlflow.models.signature import ModelSignature
 from pyspark.sql import SparkSession
-from pyspark2pmml import _jars, PMMLBuilder
-from typing import List, Optional
+from pyspark2pmml import PMMLBuilder
+from typing import Optional
 
 import mlflow.spark
 
 import logging
 import os
+import pyspark2pmml
 import sys
 import tempfile
 
 _logger = logging.getLogger(__name__)
 
-def classpath(version: str = None) -> List[str]:
-	return _jars(version = version)
+spark_jars = pyspark2pmml.spark_jars
 
 def convert_model(spark_model, input_example_schema, signature: Optional[ModelSignature] = None, input_example = None) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
