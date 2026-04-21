@@ -6,6 +6,8 @@ import jpmml_evaluator_pyspark
 
 spark_jars = jpmml_evaluator_pyspark.spark_jars
 
+spark_jars_packages = jpmml_evaluator_pyspark.spark_jars_packages
+
 log_model = pmml.log_model
 
 save_model = pmml.save_model

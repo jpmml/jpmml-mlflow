@@ -17,6 +17,8 @@ _logger = logging.getLogger(__name__)
 
 spark_jars = pyspark2pmml.spark_jars
 
+spark_jars_packages = pyspark2pmml.spark_jars_packages
+
 def convert_model(spark_model, input_example_schema, signature: Optional[ModelSignature] = None, input_example = None) -> Optional[str]:
 	fd, pmml_path = tempfile.mkstemp(suffix = ".pmml")
 	os.close(fd)
