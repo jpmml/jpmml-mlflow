@@ -74,7 +74,50 @@ Installing into a new environment:
 # Conversion side flavors
 pip install jpmml-mlflow[sklearn,lightgbm,spark,xgboost]
 # Evaluation side flavors
-pip install jpmml-mlflow[evaluator,evaluator-spark]
+pip install jpmml-mlflow[evaluator-spark]
+```
+
+# Configuration #
+
+PySpark-oriented JPMML-MLflow modules (such as `jpmml_mlflow.spark` and `jpmml_mlflow.evaluator_spark`) require supporting JPMML libraries to be available on PySpark classpath.
+
+These modules expose two helper functions:
+
+* `spark_jars(version: str)`. Returns a JAR file paths string. Pass as `--jars` command-line option, or as `spark.jars` configuration option.
+* `spark_jars_packages(version: str)`. Returns an Apache Maven package coordinates string. Pass as `--packages` command-line option, or as `spark.jars.packages` configuration option.
+
+## Local setup
+
+Configure the PySpark classpath programmatically:
+
+```python
+from pyspark.sql import SparkSession
+
+import jpmml_mlflow.${flavor}
+
+import pyspark
+
+spark = SparkSession.builder \
+	.config("spark.jars", jpmml_mlflow.${flavor}.spark_jars(version = pyspark.__version__)) \
+	.getOrCreate()
+```
+
+## Cluster setup
+
+Get the Apache Maven package coordinates:
+
+```python
+import jpmml_mlflow.${flavor}
+
+import pyspark
+
+print(jpmml_mlflow.${flavor}.spark_jars_packages(version = pyspark.__version__))
+```
+
+Pass this value to `pyspark` or `spark-submit` using the `--packages` command-line option:
+
+```bash
+$SPARK_HOME/bin/pyspark --packages $(python -c "import jpmml_mlflow.${flavor}; print(jpmml_mlflow.${flavor}.spark_jars_packages())")
 ```
 
 # Usage #
@@ -89,7 +132,7 @@ Summary of PMML flavor modules:
   * `jpmml_mlflow.spark`. Extends `mlflow.spark` with PMML save when logging or saving a PySpark artifact.
   * `jpmml_mlflow.xgboost`. Extends `mlflow.xgboost` with PMML save when logging or saving an XGBoost artifact.
 * Evaluation side:
-  * `jpmml_mlflow.evaluator-spark`. Loads PMML into a JPMML-Evaluator artifact, which then becomes a PySpark transformer.
+  * `jpmml_mlflow.evaluator_spark`. Loads PMML into a PySpark transformer artifact.
 
 ## Foundation
 
@@ -217,27 +260,6 @@ The conversion task is delegated to the [`pyspark2pmml`](https://github.com/jpmm
 The list of supported transformer and estimator types is available [here](https://github.com/jpmml/jpmml-sparkml/blob/master/features.md).
 Develop and register custom [JPMML-SparkML](https://github.com/jpmml/jpmml-sparkml) converter classes as necessary.
 
-PySpark2PMML requires [JPMML-SparkML](https://github.com/jpmml/jpmml-sparkml) library JAR files available on PySpark classpath.
-They are typically added using `--jars` or `--packages` command-line options.
-
-JPMML-MLflow incorporates JPMML dependencies for all supported PySpark versions.
-Access the right JAR fileset using the `jpmml_mlflow.spark.classpath(version: str)` utility function.
-
-Configuring the PySpark classpath programmatically:
-
-```python
-from pyspark.sql import SparkSession
-
-import jpmml_mlflow.spark
-import pyspark
-
-spark_jars = jpmml_mlflow.spark.classpath(version = pyspark.__version__)
-
-spark = SparkSession.builder \
-	.config("spark.jars", ",".join(spark_jars)) \
-	.getOrCreate()
-```
-
 ### `jpmml_mlflow.xgboost`
 
 A PMML-aware replacement for the `mlflow.xgboost` module.
@@ -261,27 +283,21 @@ Apache Spark is poorly interoperable with Python artifacts.
 The default approach is to turn the Python function flavor of a model artifact into a Python UDF using the `mlflow.pyfunc.spark_udf()` utility function.
 However, scoring Spark DataFrame data with Python UDF is a high friction operation, because the data needs to be re-serialized to pass it from one environment to another.
 
-The `jpmml_mlflow.evaluator-spark` module provides a compelling alternative to that.
+The `jpmml_mlflow.evaluator_spark` module provides a compelling alternative to that.
 The PMML flavor of a model artifact is loaded into a JPMML-Evaluator artifact, which is then wrapped into an Apache Spark transformer.
 This transformer scores Spark DataFrame data natively on executors via `mapPartitions`. There is no JVM process boundary, no data serialization overhead, let alone any cluster-side ML framework configuration or dependencies.
 
-Loading a logged model:
-
-```python
-import jpmml_mlflow.evaluator_spark
-
-evaluator = jpmml_mlflow.evaluator_spark.load_model(f"runs:/{run_id}/model")
-```
-
-Constructing a PySpark transformer, and scoring data:
+Loading a logged model into a PySpark transformer:
 
 ```python
 from jpmml_evaluator_pyspark import FlatPMMLTransformer, NestedPMMLTransformer
 
-# Flat layout of result columns
-pmml_transformer = FlatPMMLTransformer(evaluator)
+import jpmml_mlflow.evaluator_spark
+
+# Flat layout of result columns (default)
+pmml_transformer = jpmml_mlflow.evaluator_spark.load_model(f"runs:/{run_id}/model")
 # Nested layout of result columns
-#pmml_transformer = NestedPMMLTransformer(evaluator)
+#pmml_transformer = jpmml_mlflow.evaluator_spark.load_model(f"runs:/{run_id}/model", transformer_type = NestedPMMLTransformer)
 
 #pmml_schema = pmml_transformer.transformSchema(df.schema)
 #print(pmml_schema)
@@ -291,27 +307,6 @@ pmml_df.show()
 ```
 
 The PySpark PMML transformers are provided by the [`jpmml-evaluator-pyspark`](https://github.com/jpmml/jpmml-evaluator-pyspark) package.
-
-JPMML-Evaluator-PySpark requires [JPMML-Evaluator-Spark](https://github.com/jpmml/jpmml-evaluator-spark) and [JPMML-Evaluator](https://github.com/jpmml/jpmml-evaluator) library JAR files available on PySpark classpath.
-They are typically added using `--jars` or `--packages` command-line options.
-
-JPMML-MLflow incorporates JPMML dependencies for all supported PySpark versions.
-Access the right JAR fileset using the `jpmml_mlflow.evaluator_spark.classpath(version: str)` utility function.
-
-Configuring the PySpark classpath programmatically:
-
-```python
-from pyspark.sql import SparkSession
-
-import jpmml_mlflow.evaluator_spark
-import pyspark
-
-spark_jars = jpmml_mlflow.evaluator_spark.classpath(version = pyspark.__version__)
-
-spark = SparkSession.builder \
-	.config("spark.jars", ",".join(spark_jars)) \
-	.getOrCreate()
-```
 
 # License #
 
@@ -324,4 +319,4 @@ If you would like to use JPMML-MLflow in a proprietary software project, then it
 
 JPMML-MLflow is developed and maintained by Openscoring Ltd, Estonia.
 
-Interested in using JPMML software in your software? Please contact [info@openscoring.io](mailto:info@openscoring.io)
+Interested in using [Java PMML API](https://github.com/jpmml) software in your company? Please contact [info@openscoring.io](mailto:info@openscoring.io)

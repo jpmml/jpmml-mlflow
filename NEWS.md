@@ -1,3 +1,54 @@
+# 0.4.0 #
+
+## Breaking changes
+
+* Removed `jpmml_mlflow.evaluator` module.
+
+The core functionality of this module was merged into the `jpmml_mlflow.evaluator_spark` module.
+
+* Changed the return type of the `jpmml_mlflow.evaluator_spark.load_model()` function from JPMML-Evaluator object to PySpark transformer.
+
+Previously, loading the JPMML-Evaluator object and wrapping it into a JPMML-Evaluaor-PySpark transformer were two separate steps:
+
+```python
+from jpmml_evaluator_pyspark import FlatPMMLTransformer
+
+import jpmml_mlflow.evaluator_spark
+
+evaluator = jpmml_mlflow.evaluator_spark.load_model(model_uri = ...)
+pmml_transformer = FlatPMMLTransformer(evaluator)
+```
+
+The same is an atomic operation now:
+
+```python
+import jpmml_mlflow.evaluator_spark
+
+pmml_transformer = jpmml_mlflow.evaluator_spark.load_model(model_uri = ...)
+```
+
+The default transformer type is `jpmml_evaluator_pyspark.FlatPMMLTransformer`.
+Use the `transformer_type` parameter to specify a different transformer type.
+
+* Removed the `classpath()` function from `jpmml_mlflow.spark` and `jpmml_mlflow.evaluator_spark` modules.
+
+Use the `spark_jars()` function instead.
+
+## New features
+
+* Added `spark_jars(version: str)` function to modules that require PySpark classpath customization.
+
+* Added `spark_jars_packages(version: str)` function to modules that require PySpark classpath customization.
+
+## Minor improvements and fixes
+
+* Updated PySpark2PMML to 0.11.0 or newer.
+
+* Updated JPMML-Evaluator-PySpark to 0.3.0 or newer.
+
+* Reduced the installed package size thousandfold (from 18 MB to 18 kB) by delegating JAR file management to `pyspark2pmml` and `jpmml-evaluator-pyspark` packages. 
+
+
 # 0.3.0 #
 
 ## Breaking changes
